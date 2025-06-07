@@ -1,6 +1,10 @@
 import pandas as pd
 from scheduler.task import Task
 
+def load_total_resources(filepath):
+    df = pd.read_csv(filepath)
+    return {row["resource"].strip(): int(row["amount"]) for _, row in df.iterrows()}
+
 
 def parse_predecessors(x):
     parts = str(x).split(",")

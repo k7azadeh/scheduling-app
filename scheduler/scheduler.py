@@ -1,4 +1,3 @@
-from matplotlib.style.core import available
 
 
 class Scheduler:
@@ -22,20 +21,36 @@ class Scheduler:
                     self.in_progress.remove(task)
                     self.completed_tasks.append(task)
                     print(f"Completed: {task}")
-            available_resources = self.total_resources - sum(t.resource_required for t in self.in_progress)
-            print(self.time, f"available resource is {available_resources}")
+            available_resources = self.get_available_resources()
+            # available_resources = self.total_resources - sum(t.resource_required for t in self.in_progress)
+
+            print(self.time, f"Available resources: {available_resources}")
+
 
             completed_ids = [t.task_id for t in self.completed_tasks]
 
             #Start new ready tasks if resources are available
             for task in self.tasks:
                 if task.start_time is None and task.is_ready(completed_ids):
-                    if task.resource_required <= available_resources:
+                    if self.can_start(task, available_resources):
                         task.start_time = self.time
                         self.in_progress.append(task)
                         self.scheduled_tasks.append(task)
-                        available_resources -= task.resource_required
+                        for res, amount in task.resource_required.items():
+                            available_resources[res] -= amount
                         print(f"Started: {task}")
-
             self.time += 1
         print("\nScheduling complete!")
+
+    def get_available_resources(self):
+        available_resource = self.total_resources.copy()
+        for task in self.in_progress:
+            for res, amount in task.resource_required.items():
+                available_resource[res] -= amount
+        return available_resource
+
+    def can_start(self, task, available_resources):
+        for res, amount in task.resource_required.items():
+            if available_resources.get(res, 0) < amount:
+                return False
+        return True
