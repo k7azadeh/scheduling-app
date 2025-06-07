@@ -13,7 +13,7 @@ class Task:
         self.remaining_duration = duration
 
     def __str__(self):
-        return f"Task {self.task_id}: {self.name} ({self.duration} units, needs {self.resource_required} resources)"
+        return f"Task {self.task_id}: name: {self.name}, duration:({self.duration} units, required resources: {self.resource_required}, predecessors: {self.predecessors})"
 
     def is_ready(self, completed_task_ids):
         return all(pred in completed_task_ids for pred in self.predecessors)
