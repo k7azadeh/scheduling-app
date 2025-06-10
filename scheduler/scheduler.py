@@ -9,6 +9,7 @@ class Scheduler:
         self.in_progress = []
         self.completed_tasks = []
         self.make_span = 0
+        self.utilization_log = []
 
 
     def schedule(self, verbose=False):
@@ -51,6 +52,7 @@ class Scheduler:
                             available_resources[res] -= amount
                         if verbose:
                             print(f"Started: {task.name}")
+            self.utilization_log.append(self.get_current_usage())
             self.time += 1
 
         self.make_span = max([t.end_time for t in self.completed_tasks])
@@ -59,6 +61,7 @@ class Scheduler:
         for task in self.tasks:
             print(f"{task.name}: starts at {task.start_time}, ends at {task.end_time}")
         print(f"Total makespan is: {self.make_span}")
+        print(self.utilization_log)
 
     def get_available_resources(self):
         available_resource = self.total_resources.copy()
@@ -72,3 +75,11 @@ class Scheduler:
             if available_resources.get(res, 0) < amount:
                 return False
         return True
+
+    def get_current_usage(self):
+        usage = {res: 0 for res in self.total_resources}
+        for task in self.in_progress:
+            for res, amount in task.resource_required.items():
+                usage[res] +=amount
+        usage["time"] = self.time
+        return usage
