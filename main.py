@@ -11,8 +11,4 @@ if __name__ == "__main__":
     scheduler = Scheduler(tasks, total_resources)
     scheduler.schedule()
 
-    print("\nFinal schedule:")
-    for task in tasks:
-        print(f"{task.name}: starts at {task.start_time}, ends at {task.end_time}")
-    #
-    # plot_gantt(tasks)
+    plot_gantt(tasks)
