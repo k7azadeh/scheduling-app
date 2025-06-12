@@ -25,7 +25,6 @@ class Scheduler:
                     if verbose:
                         print(f"Completed: {task}")
             available_resources = self.get_available_resources()
-            # available_resources = self.total_resources - sum(t.resource_required for t in self.in_progress)
 
             if verbose:
                 print(f"time:{self.time}")
