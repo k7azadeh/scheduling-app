@@ -49,7 +49,7 @@ def plot_resource_utilization(utilization_log, total_resources):
         ax2 = ax1.twinx() #secondary y axis
 
         # Bar chart on left axis (percent)
-        bars = ax1.bar(time, percent_used, label=f"{res} usage (%)", color='skyblue')
+        ax1.bar(time, percent_used, label=f"{res} usage (%)", color='skyblue')
         ax1.axhline(100, color='red', linestyle='--', label="Max capacity")
         ax1.set_ylabel(f"{res} (% used)")
         ax1.set_ylim(0, 110)
@@ -65,8 +65,7 @@ def plot_resource_utilization(utilization_log, total_resources):
         # Sync the bar heights on right axis using absolute values (for reference ticks)
         ax2.set_yticks(range(0, total + 1))
 
-        #legend
-        ax1.legend(loc="upper right")
+
 
     axes[-1].set_xlabel("Time")
     plt.suptitle("Resource Utilization Over Time (%)")
